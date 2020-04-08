@@ -2,11 +2,12 @@ import * as React from "react";
 import styled from "styled-components";
 
 function getMonday(d: Date) {
-  const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
-  d.setDate(diff);
-  d.setHours(0, 0, 0, 0);
-  return new Date(d);
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+  date.setDate(diff);
+  date.setHours(0, 0, 0, 0);
+  return date;
 }
 
 function fancyWeek(d: Date) {
@@ -27,10 +28,12 @@ interface WeeksProps {
 }
 
 export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
-  const firstWeek = getMonday(birthday);
-  const currentWeek = getMonday(date);
+  const currentWeekDay = date.toLocaleString().slice(0, 10);
 
   const weeks = React.useMemo(() => {
+    const currentWeek = getMonday(date);
+    const firstWeek = getMonday(birthday);
+
     const weeks = new Array<IWeek>(4275);
     const shiftedWeek = new Date(firstWeek);
 
@@ -56,16 +59,14 @@ export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
         status: "future",
       };
     }
-    return weeks;
-  }, [firstWeek, currentWeek]);
+    return weeks.map(({ label, status }) => (
+      <Week key={label} title={label} data-status={status} />
+    ));
+  }, [birthday, currentWeekDay]);
 
   return (
     <Container>
-      <Grid>
-        {weeks.map(({ label, status }) => (
-          <Week key={label} title={label} data-status={status} />
-        ))}
-      </Grid>
+      <Grid>{weeks}</Grid>
     </Container>
   );
 };

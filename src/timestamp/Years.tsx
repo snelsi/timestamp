@@ -2,24 +2,36 @@ import * as React from "react";
 import styled from "styled-components";
 
 interface YearsProps {
-  date: Date;
+  currentYear: number;
+  startYear: number;
+  showYears?: number;
 }
 
-export const Years: React.FC<YearsProps> = ({ date }) => (
-  <YearsGrid>
-    {[...Array(85)].map((_, index) => {
-      const year = index + 2000;
-      let status: "gone" | "current" | "future" = "future";
-      if (year < date.getFullYear()) status = "gone";
-      if (year === date.getFullYear()) status = "current";
-      return (
+export const Years: React.FC<YearsProps> = ({ startYear, currentYear, showYears = 85 }) => {
+  const years = React.useMemo(
+    () =>
+      [...Array(showYears)].map((_, index) => {
+        const year = index + startYear;
+        let status: "gone" | "current" | "future" = "future";
+        if (year < currentYear) status = "gone";
+        if (year === currentYear) status = "current";
+        return {
+          year,
+          status,
+        };
+      }),
+    [startYear, currentYear, showYears],
+  );
+  return (
+    <YearsGrid>
+      {years.map(({ year, status }) => (
         <Year data-status={status} key={year}>
           {year}
         </Year>
-      );
-    })}
-  </YearsGrid>
-);
+      ))}
+    </YearsGrid>
+  );
+};
 
 const YearsGrid = styled.div`
   display: flex;

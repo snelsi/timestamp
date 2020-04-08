@@ -7,18 +7,30 @@ import { useTime } from "useTime";
 const myBirthday = new Date("April 22 2000");
 
 const Timestamp: React.FC = () => {
+  const { pathname } = window.location;
+
+  const startOfTime = React.useMemo(() => {
+    if (!pathname || pathname === "/") return myBirthday;
+
+    const pathNameTime = new Date(pathname.slice(1));
+
+    if (pathNameTime instanceof Date && !Number.isNaN(pathNameTime.getTime())) return pathNameTime;
+
+    return myBirthday;
+  }, [pathname]);
+
   const now = useTime();
 
   return (
     <Container>
       <h1 className="current-time">{now.toLocaleTimeString()}</h1>
       <h2>Memento Mori</h2>
-      <Years date={now} />
+      <Years startYear={startOfTime.getFullYear()} currentYear={now.getFullYear()} />
       <YearOverview date={now} />
       <h2>Carpe Diem</h2>
       <TimeOverview date={now} />
       <h2>Tempus fugit</h2>
-      <Weeks birthday={myBirthday} date={now} />
+      <Weeks birthday={startOfTime} date={now} />
     </Container>
   );
 };
