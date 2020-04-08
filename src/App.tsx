@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import styled from "styled-components";
 
-function App() {
+import { TimeOverview, Weeks, Years, YearOverview } from "timestamp";
+import { useTime } from "useTime";
+
+const myBirthday = new Date("April 22 2000");
+
+const Timestamp: React.FC = () => {
+  const now = useTime();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <h1 className="current-time">{now.toLocaleTimeString()}</h1>
+      <h2>Memento Mori</h2>
+      <Years date={now} />
+      <YearOverview date={now} />
+      <h2>Carpa Diem</h2>
+      <TimeOverview date={now} />
+      <h2>Tempus fugit</h2>
+      <Weeks birthday={myBirthday} date={now} />
+    </Container>
   );
-}
+};
 
-export default App;
+const Container = styled.div`
+  display: grid;
+  grid-gap: 2.5em;
+  margin: 1.5em;
+  @media (max-width: 640px) {
+    margin: 1.5em auto;
+    width: 87.5%;
+  }
+  & > .current-time {
+    font-size: 3rem;
+    font-weight: 600;
+  }
+`;
+export default Timestamp;
