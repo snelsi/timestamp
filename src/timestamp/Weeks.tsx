@@ -71,11 +71,11 @@ export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
 };
 
 const Container = styled.div`
-  max-width: 944px;
+  max-width: 920px;
 `;
 
 const Grid = styled.div`
-  --cell-size: 24px;
+  --cell-size: 28px;
   display: grid;
   grid-template-columns: repeat(auto-fit, var(--cell-size));
   grid-gap: 2px;
@@ -119,7 +119,7 @@ const Week = styled.span`
   transition: var(--transition-ease);
 
   &[data-status="gone"] {
-    background-color: rgba(77, 83, 88, 0.87);
+    background-color: rgba(75, 77, 79, 0.8);
   }
   &[data-status="current"] {
     background-color: rgba(249, 77, 86, 1);
