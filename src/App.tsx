@@ -15,7 +15,7 @@ const Timestamp: React.FC = () => {
       <h2>Memento Mori</h2>
       <Years date={now} />
       <YearOverview date={now} />
-      <h2>Carpa Diem</h2>
+      <h2>Carpe Diem</h2>
       <TimeOverview date={now} />
       <h2>Tempus fugit</h2>
       <Weeks birthday={myBirthday} date={now} />
