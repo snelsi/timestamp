@@ -1,22 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 
-function getMonday(d: Date) {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-  date.setDate(diff);
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 
-function fancyWeek(d: Date) {
-  const date = new Date(d);
-  const weekStart = date.toLocaleString().slice(0, 10);
-  date.setDate(date.getDate() + 6);
-  const weekEnd = date.toLocaleString().slice(0, 10);
-  return `${weekStart} - ${weekEnd}`;
-}
+import { dateToLocalString, getMonday, fancyWeek } from "scripts";
 
 interface IWeek {
   label: string;
@@ -28,25 +16,25 @@ interface WeeksProps {
 }
 
 export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
-  const currentWeekDay = date.toLocaleString().slice(0, 10);
+  const currentWeekDay = dateToLocalString(date);
 
   const weeks = React.useMemo(() => {
-    const currentWeek = getMonday(date);
+    const currentWeek = new Date(currentWeekDay);
     const firstWeek = getMonday(birthday);
 
-    const weeks = new Array<IWeek>(4275);
+    const weeksArray = new Array<IWeek>(4275);
     const shiftedWeek = new Date(firstWeek);
 
     let i = 0;
     while (shiftedWeek < currentWeek) {
-      weeks[i] = {
+      weeksArray[i] = {
         label: fancyWeek(shiftedWeek),
         status: "gone",
       };
       shiftedWeek.setDate(shiftedWeek.getDate() + 7);
       i++;
     }
-    weeks[i] = {
+    weeksArray[i] = {
       label: fancyWeek(shiftedWeek),
       status: "current",
     };
@@ -54,13 +42,15 @@ export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
 
     for (; i < 4275; i++) {
       shiftedWeek.setDate(shiftedWeek.getDate() + 7);
-      weeks[i] = {
+      weeksArray[i] = {
         label: fancyWeek(shiftedWeek),
         status: "future",
       };
     }
-    return weeks.map(({ label, status }) => (
-      <Week key={label} title={label} data-status={status} />
+    return weeksArray.map(({ label, status }) => (
+      <Tippy content={label} key={label}>
+        <Week data-status={status} />
+      </Tippy>
     ));
   }, [birthday, currentWeekDay]);
 

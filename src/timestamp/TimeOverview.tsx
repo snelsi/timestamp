@@ -9,27 +9,37 @@ interface TimeOverviewProps {
 
 export const TimeOverview: React.FC<TimeOverviewProps> = ({ date }) => (
   <Container>
-    <Row24>
-      <RowLine numbers={24} fillTo={date.getHours()} />
-    </Row24>
-    <Row30>
-      <RowLine numbers={60} fillTo={date.getMinutes()} />
-    </Row30>
-    <Row30>
-      <RowLine numbers={60} fillTo={date.getSeconds()} />
-    </Row30>
+    <Row data-max-width={24}>
+      <RowLine
+        numbers={24}
+        fillTo={date.getHours() + date.getMinutes() / 60}
+        current={date.getHours()}
+      />
+    </Row>
+    <Row data-max-width={30}>
+      <RowLine
+        numbers={60}
+        fillTo={date.getMinutes() + date.getSeconds() / 60}
+        current={date.getMinutes()}
+      />
+    </Row>
+    <Row data-max-width={30}>
+      <RowLine numbers={60} fillTo={date.getSeconds()} current={date.getSeconds()} />
+    </Row>
   </Container>
 );
 
 const Container = styled.div`
   display: grid;
   grid-gap: 1.25em;
-  font-weight: 500;
 `;
 
-const Row24 = styled.div`
+const Row = styled.div`
   max-width: 44em;
-`;
-const Row30 = styled.div`
-  max-width: 55em;
+  &[data-max-width="24"] {
+    max-width: 44em;
+  }
+  &[data-max-width="30"] {
+    max-width: 55em;
+  }
 `;

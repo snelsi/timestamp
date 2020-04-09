@@ -1,45 +1,32 @@
 import * as React from "react";
-import styled from "styled-components";
+import { LineCell } from "timestamp";
 
 interface RowLineProps {
+  from?: number;
   numbers: number;
   fillTo: number;
+  current?: number;
+  dataType?: string;
 }
-export const RowLine: React.FC<RowLineProps> = ({ numbers, fillTo }) => (
-  <>
-    {[...Array(numbers)].map((_, index) => (
-      <Cell key={index} fillTo={fillTo - index}>
-        {index + 1}
-      </Cell>
-    ))}
-  </>
+export const RowLine: React.FC<RowLineProps> = React.memo(
+  ({ numbers, fillTo, from = 1, dataType = undefined, current = undefined, ...props }) => (
+    <>
+      {[...Array(numbers)].map((_, index) => {
+        const value = index + from;
+        const status = value === current ? "current" : undefined;
+
+        return (
+          <LineCell
+            key={value}
+            fillTo={fillTo - value}
+            data-type={dataType}
+            data-status={status}
+            {...props}
+          >
+            {value}
+          </LineCell>
+        );
+      })}
+    </>
+  ),
 );
-
-interface CellProps {
-  fillTo?: number;
-}
-const Cell = styled.span<CellProps>`
-  display: inline-block;
-  position: relative;
-
-  font-size: inherit;
-  line-height: 1.8em;
-  text-align: center;
-
-  height: 1.8em;
-  width: 1.8em;
-
-  &::before {
-    content: "";
-    border-bottom: 2px solid black;
-    position: absolute;
-    transition: var(--transition-ease);
-    top: 45%;
-    left: 0;
-    right: ${({ fillTo = 100 }) => {
-      if (fillTo <= 0) return 100;
-      if (fillTo >= 1) return 0;
-      return fillTo;
-    }}%;
-  }
-`;
