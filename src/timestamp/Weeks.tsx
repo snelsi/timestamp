@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
-import { dateToLocalString, getMonday, fancyWeek } from "scripts";
+import { dateToString, getMonday, fancyWeek } from "scripts";
 
 interface IWeek {
   label: string;
@@ -16,14 +16,12 @@ interface WeeksProps {
 }
 
 export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
-  const currentWeekDay = dateToLocalString(date);
+  const currentWeekDay = dateToString(date);
 
   const weeks = React.useMemo(() => {
-    const currentWeek = new Date(currentWeekDay);
-    const firstWeek = getMonday(birthday);
-
     const weeksArray = new Array<IWeek>(4275);
-    const shiftedWeek = new Date(firstWeek);
+    const currentWeek = getMonday(new Date(currentWeekDay));
+    const shiftedWeek = getMonday(birthday);
 
     let i = 0;
     while (shiftedWeek < currentWeek) {
@@ -47,6 +45,7 @@ export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
         status: "future",
       };
     }
+
     return weeksArray.map(({ label, status }) => (
       <Tippy content={label} key={label}>
         <Week data-status={status} />
