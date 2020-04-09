@@ -4,7 +4,12 @@ import styled from "styled-components";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 
-import { dateToString, getMonday, fancyWeek } from "scripts";
+import startOfISOWeek from "date-fns/startOfISOWeek";
+import endOfISOWeek from "date-fns/endOfISOWeek";
+import eachWeekOfInterval from "date-fns/eachWeekOfInterval";
+import addWeeks from "date-fns/addWeeks";
+
+import { dateToString, fancyWeek } from "scripts";
 
 interface IWeek {
   label: string;
@@ -13,45 +18,44 @@ interface IWeek {
 interface WeeksProps {
   birthday: Date;
   date: Date;
+  showWeeks?: number;
 }
 
-export const Weeks: React.FC<WeeksProps> = ({ birthday, date }) => {
+export const Weeks: React.FC<WeeksProps> = ({ birthday, date, showWeeks = 4275 }) => {
   const currentWeekDay = dateToString(date);
 
   const weeks = React.useMemo(() => {
-    const weeksArray = new Array<IWeek>(4275);
-    const currentWeek = getMonday(new Date(currentWeekDay));
-    const shiftedWeek = getMonday(birthday);
+    const currentWeek = startOfISOWeek(new Date(currentWeekDay));
+    const startWeek = endOfISOWeek(birthday);
+    const endWeek = addWeeks(new Date(startWeek), showWeeks);
 
-    let i = 0;
-    while (shiftedWeek < currentWeek) {
-      weeksArray[i] = {
-        label: fancyWeek(shiftedWeek),
-        status: "gone",
-      };
-      shiftedWeek.setDate(shiftedWeek.getDate() + 7);
-      i++;
-    }
-    weeksArray[i] = {
-      label: fancyWeek(shiftedWeek),
+    const weeksBefore: IWeek[] = eachWeekOfInterval({
+      start: startWeek,
+      end: currentWeek,
+    }).map((week) => ({
+      label: fancyWeek(week),
+      status: "gone",
+    }));
+
+    const currentWeekElem: IWeek = {
+      label: fancyWeek(currentWeek),
       status: "current",
     };
-    i++;
 
-    for (; i < 4275; i++) {
-      shiftedWeek.setDate(shiftedWeek.getDate() + 7);
-      weeksArray[i] = {
-        label: fancyWeek(shiftedWeek),
-        status: "future",
-      };
-    }
+    const weeksAfter: IWeek[] = eachWeekOfInterval({
+      start: addWeeks(endOfISOWeek(currentWeek), 1),
+      end: endWeek,
+    }).map((week) => ({
+      label: fancyWeek(week),
+      status: "future",
+    }));
 
-    return weeksArray.map(({ label, status }) => (
+    return [...weeksBefore, currentWeekElem, ...weeksAfter].map(({ label, status }) => (
       <Tippy content={label} key={label}>
         <Week data-status={status} />
       </Tippy>
     ));
-  }, [birthday, currentWeekDay]);
+  }, [birthday, currentWeekDay, showWeeks]);
 
   return (
     <Container>

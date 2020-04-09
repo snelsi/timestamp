@@ -1,7 +1,11 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { dateToString, dayOfYear, daysInYear, isValidDate, useTime } from "scripts";
+import getDaysInYear from "date-fns/getDaysInYear";
+import getDayOfYear from "date-fns/getDayOfYear";
+import isValid from "date-fns/isValid";
+
+import { dateToString, useTime } from "scripts";
 
 import { DatePicker, TimeOverview, Weeks, Years, YearOverview } from "timestamp";
 
@@ -16,7 +20,7 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }
   };
 
   const startOfTime = React.useMemo(() => {
-    if (isValidDate(birthday)) {
+    if (isValid(birthday)) {
       const newPathname = dateToString(birthday);
       window.history.replaceState({}, null, newPathname);
       return birthday;
@@ -36,7 +40,7 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }
       <Years
         startYear={startOfTime.getFullYear()}
         currentYear={now.getFullYear()}
-        currentYearCompletePercent={dayOfYear(now) / daysInYear(now.getFullYear())}
+        currentYearCompletePercent={getDayOfYear(now) / getDaysInYear(now)}
       />
       <YearOverview date={now} />
       <h2>Carpe Diem</h2>

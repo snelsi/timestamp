@@ -15,5 +15,5 @@ export type MonthName =
 export interface Month {
   number: number;
   month: MonthName;
-  days: 28 | 29 | 30 | 31;
+  days: number;
 }

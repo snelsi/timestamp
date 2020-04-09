@@ -1,9 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { Month, RowLine } from "timestamp";
+import isLeapYear from "date-fns/isLeapYear";
 
-import { isLeapYear } from "scripts";
+import { Month, RowLine } from "timestamp";
 
 const calculateFill = (month: number, days: number, date: Date) => {
   if (month < date.getMonth()) return days + 1;
@@ -17,12 +17,7 @@ interface YearOverviewProps {
 export const YearOverview: React.FC<YearOverviewProps> = ({ date }) => (
   <Container>
     <MonthOverview month="Jan" days={31} number={0} date={date} />
-    <MonthOverview
-      month="Feb"
-      days={isLeapYear(date.getFullYear()) ? 29 : 28}
-      number={1}
-      date={date}
-    />
+    <MonthOverview month="Feb" days={isLeapYear(date) ? 29 : 28} number={1} date={date} />
     <MonthOverview month="Mar" days={31} number={2} date={date} />
     <MonthOverview month="Apr" days={30} number={3} date={date} />
     <MonthOverview month="May" days={31} number={4} date={date} />

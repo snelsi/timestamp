@@ -1,7 +1,7 @@
 import * as React from "react";
+import isValid from "date-fns/isValid";
 
 import TimestampOverview from "TimestampOverview";
-import { isValidDate } from "scripts";
 
 const myBirthday = "2000-04-22";
 
@@ -13,8 +13,7 @@ const App: React.FC = () => {
 
     const pathNameString = pathname.slice(1);
 
-    const pathNameTime = new Date(pathNameString);
-    if (isValidDate(pathNameTime)) return pathNameString;
+    if (isValid(new Date(pathNameString))) return pathNameString;
 
     return myBirthday;
   }, [pathname]);
