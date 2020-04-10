@@ -4,7 +4,8 @@ import styled from "styled-components";
 import differenceInSeconds from "date-fns/differenceInSeconds";
 import differenceInMinutes from "date-fns/differenceInMinutes";
 import differenceInHours from "date-fns/differenceInHours";
-import differenceInCalendarDays from "date-fns/differenceInCalendarDays";
+import differenceInDays from "date-fns/differenceInDays";
+import differenceInYears from "date-fns/differenceInYears";
 
 interface StatsProps {
   now: Date;
@@ -13,7 +14,8 @@ interface StatsProps {
 
 export const Stats: React.FC<StatsProps> = ({ now, start }) => (
   <Container>
-    <span>{differenceInCalendarDays(now, start)}</span> <span>Days</span>
+    <span>{differenceInYears(now, start)}</span> <span>Years</span>
+    <span>{differenceInDays(now, start)}</span> <span>Days</span>
     <span>{differenceInHours(now, start)}</span> <span>Hours</span>
     <span>{differenceInMinutes(now, start)}</span> <span>Minutes</span>
     <span>{differenceInSeconds(now, start)}</span> <span>Seconds</span>
