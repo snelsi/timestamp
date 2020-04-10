@@ -5,10 +5,11 @@ import { RowLine } from "timestamp";
 
 interface TimeOverviewProps {
   date: Date;
+  isDead?: boolean;
 }
 
-export const TimeOverview: React.FC<TimeOverviewProps> = ({ date }) => (
-  <Container>
+export const TimeOverview: React.FC<TimeOverviewProps> = ({ date, isDead = false }) => (
+  <Container data-dead={isDead}>
     <Row data-max-width={24}>
       <RowLine
         numbers={24}
@@ -31,7 +32,7 @@ export const TimeOverview: React.FC<TimeOverviewProps> = ({ date }) => (
 
 const Container = styled.div`
   display: grid;
-  grid-gap: 1em;
+  gap: 1em;
 `;
 
 const Row = styled.div`

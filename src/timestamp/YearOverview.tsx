@@ -13,9 +13,10 @@ const calculateFill = (month: number, days: number, date: Date) => {
 
 interface YearOverviewProps {
   date: Date;
+  isDead?: boolean;
 }
-export const YearOverview: React.FC<YearOverviewProps> = ({ date }) => (
-  <Container>
+export const YearOverview: React.FC<YearOverviewProps> = ({ date, isDead = false }) => (
+  <Container data-dead={isDead}>
     <MonthOverview month="Jan" days={31} number={0} date={date} />
     <MonthOverview month="Feb" days={isLeapYear(date) ? 29 : 28} number={1} date={date} />
     <MonthOverview month="Mar" days={31} number={2} date={date} />
@@ -40,7 +41,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 420px) {
-    grid-gap: 1.5em;
+    gap: 1.5em;
     font-size: 1.125rem;
   }
 `;

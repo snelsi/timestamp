@@ -6,7 +6,8 @@ import Tippy from "@tippyjs/react";
 import startOfISOWeek from "date-fns/startOfISOWeek";
 import endOfISOWeek from "date-fns/endOfISOWeek";
 import eachWeekOfInterval from "date-fns/eachWeekOfInterval";
-import addWeeks from "date-fns/addWeeks";
+import isSameWeek from "date-fns/isSameWeek";
+import isBefore from "date-fns/isBefore";
 
 import { dateToString, fancyWeek } from "scripts";
 
@@ -15,50 +16,48 @@ interface IWeek {
   status: "gone" | "current" | "future";
 }
 interface WeeksProps {
-  birthday: Date;
-  date: Date;
-  showWeeks?: number;
+  startWeek: Date;
+  endWeek: Date;
+  now: Date;
+  hideFuture?: boolean;
 }
 
-export const Weeks: React.FC<WeeksProps> = ({ birthday, date, showWeeks = 4275 }) => {
-  const currentWeekDay = dateToString(date);
+export const Weeks: React.FC<WeeksProps> = ({ startWeek, endWeek, now, hideFuture = true }) => {
+  const firstWeekString = dateToString(startWeek);
+  const lastWeekString = dateToString(endWeek);
+  const currentWeekString = dateToString(now);
 
   const weeks = React.useMemo(() => {
-    const currentWeek = startOfISOWeek(new Date(currentWeekDay));
-    const startWeek = endOfISOWeek(birthday);
-    const endWeek = addWeeks(new Date(startWeek), showWeeks);
+    const firstWeek = startOfISOWeek(new Date(firstWeekString));
+    const lastWeek = endOfISOWeek(new Date(lastWeekString));
+    const currentWeek = endOfISOWeek(new Date(currentWeekString));
 
-    const weeksBefore: IWeek[] = eachWeekOfInterval({
-      start: startWeek,
-      end: currentWeek,
-    }).map((week) => ({
-      label: fancyWeek(week),
-      status: "gone",
-    }));
+    const weeks: IWeek[] = eachWeekOfInterval({
+      start: firstWeek,
+      end: lastWeek,
+    }).map((week) => {
+      let status: "gone" | "current" | "future" = "future";
+      if (isSameWeek(week, currentWeek)) {
+        status = "current";
+      } else if (isBefore(week, currentWeek)) {
+        status = "gone";
+      }
+      return {
+        label: fancyWeek(week),
+        status,
+      };
+    });
 
-    const currentWeekElem: IWeek = {
-      label: fancyWeek(currentWeek),
-      status: "current",
-    };
-
-    const weeksAfter: IWeek[] = eachWeekOfInterval({
-      start: addWeeks(endOfISOWeek(currentWeek), 1),
-      end: endWeek,
-    }).map((week) => ({
-      label: fancyWeek(week),
-      status: "future",
-    }));
-
-    return [...weeksBefore, currentWeekElem, ...weeksAfter].map(({ label, status }) => (
+    return weeks.map(({ label, status }) => (
       <Tippy content={label} key={label}>
         <Week data-status={status} />
       </Tippy>
     ));
-  }, [birthday, currentWeekDay, showWeeks]);
+  }, [firstWeekString, lastWeekString, currentWeekString]);
 
   return (
     <Container>
-      <Grid>{weeks}</Grid>
+      <Grid data-hide-future={hideFuture}>{weeks}</Grid>
     </Container>
   );
 };
@@ -71,35 +70,7 @@ const Grid = styled.div`
   --cell-size: 28px;
   display: grid;
   grid-template-columns: repeat(auto-fit, var(--cell-size));
-  grid-gap: 2px;
-
-  & span:nth-last-child(9) {
-    opacity: 0.7;
-  }
-  & span:nth-last-child(8) {
-    opacity: 0.6;
-  }
-  & span:nth-last-child(7) {
-    opacity: 0.5;
-  }
-  & span:nth-last-child(6) {
-    opacity: 0.4;
-  }
-  & span:nth-last-child(5) {
-    opacity: 0.3;
-  }
-  & span:nth-last-child(4) {
-    opacity: 0.2;
-  }
-  & span:nth-last-child(3) {
-    opacity: 0.1;
-  }
-  & span:nth-last-child(2) {
-    opacity: 0.05;
-  }
-  & span:nth-last-child(1) {
-    opacity: 0.02;
-  }
+  gap: 2px;
 `;
 
 const Week = styled.span`
@@ -116,9 +87,5 @@ const Week = styled.span`
   }
   &[data-status="current"] {
     background-color: rgba(249, 77, 86, 1);
-  }
-
-  &:hover {
-    transform: scale(1.1);
   }
 `;

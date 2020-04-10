@@ -1,5 +1,6 @@
 export * from "./CakeIcon";
 export * from "./DatePicker";
+export * from "./DeadIcon";
 export * from "./interfaces";
 export * from "./LineCell";
 export * from "./RowLine";

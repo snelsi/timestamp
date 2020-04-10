@@ -8,17 +8,17 @@ import differenceInDays from "date-fns/differenceInDays";
 import differenceInYears from "date-fns/differenceInYears";
 
 interface StatsProps {
-  now: Date;
   start: Date;
+  end: Date;
 }
 
-export const Stats: React.FC<StatsProps> = ({ now, start }) => (
+export const Stats: React.FC<StatsProps> = ({ start, end }) => (
   <Container>
-    <span>{differenceInYears(now, start)}</span> <span>Years</span>
-    <span>{differenceInDays(now, start)}</span> <span>Days</span>
-    <span>{differenceInHours(now, start)}</span> <span>Hours</span>
-    <span>{differenceInMinutes(now, start)}</span> <span>Minutes</span>
-    <span>{differenceInSeconds(now, start)}</span> <span>Seconds</span>
+    <span>{differenceInYears(end, start)}</span> <span>Years</span>
+    <span>{differenceInDays(end, start)}</span> <span>Days</span>
+    <span>{differenceInHours(end, start)}</span> <span>Hours</span>
+    <span>{differenceInMinutes(end, start)}</span> <span>Minutes</span>
+    <span>{differenceInSeconds(end, start)}</span> <span>Seconds</span>
   </Container>
 );
 
@@ -48,7 +48,7 @@ const Container = styled.div`
     border-left: none;
 
     position: absolute;
-    top: 8rem;
+    top: 10rem;
     right: 1rem;
   }
 

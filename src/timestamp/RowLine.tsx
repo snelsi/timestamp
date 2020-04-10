@@ -11,7 +11,7 @@ interface RowLineProps {
 export const RowLine: React.FC<RowLineProps> = React.memo(
   ({ numbers, fillTo, from = 1, dataType = undefined, current = undefined, ...props }) => (
     <>
-      {[...Array(numbers)].map((_, index) => {
+      {[...Array(numbers > 0 ? numbers : 0)].map((_, index) => {
         const value = index + from;
         const status = value === current ? "current" : undefined;
 
