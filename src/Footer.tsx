@@ -8,7 +8,7 @@ export const Footer: React.FC<FooterProps> = () => (
     <a href="https://snelsi.now.sh" target="_blank" rel="noopener noreferrer">
       Roman Zhuravlov
     </a>
-    <div>© 2019 - 2020</div>
+    <div>© 2020</div>
   </FooterElem>
 );
 
