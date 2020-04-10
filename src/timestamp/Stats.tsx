@@ -27,7 +27,7 @@ const Container = styled.div`
   font-weight: 400;
 
   display: grid;
-  gap: 0 1.5rem;
+  gap: 0 1rem;
   grid-template-columns: 1fr auto;
 
   & > *:nth-child(odd) {
