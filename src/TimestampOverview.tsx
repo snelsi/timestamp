@@ -7,7 +7,7 @@ import isValid from "date-fns/isValid";
 
 import { dateToString, useTime } from "scripts";
 
-import { DatePicker, TimeOverview, Weeks, Years, YearOverview } from "timestamp";
+import { DatePicker, TimeOverview, Stats, Weeks, Years, YearOverview } from "timestamp";
 
 interface TimestampOverviewProps {
   initialBirthday: string;
@@ -32,36 +32,47 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }
   const now = useTime();
 
   return (
-    <Container>
-      <h1 className="current-time">{now.toLocaleTimeString()}</h1>
+    <>
+      <Container>
+        <h1>{now.toLocaleTimeString()}</h1>
 
-      <h2>Memento Mori</h2>
-      <DatePicker onChange={handleBirthdayChange} value={birthday} />
-      <Years
-        startYear={startOfTime.getFullYear()}
-        currentYear={now.getFullYear()}
-        currentYearCompletePercent={getDayOfYear(now) / getDaysInYear(now)}
-      />
-      <YearOverview date={now} />
-      <h2>Carpe Diem</h2>
-      <TimeOverview date={now} />
-      <h2>Tempus fugit</h2>
-      <Weeks birthday={startOfTime} date={now} />
-    </Container>
+        <h3>Memento Mori</h3>
+        <DatePicker onChange={handleBirthdayChange} value={birthday} />
+
+        <Stats now={now} start={startOfTime} />
+        <Years
+          startYear={startOfTime.getFullYear()}
+          currentYear={now.getFullYear()}
+          currentYearCompletePercent={getDayOfYear(now) / getDaysInYear(now)}
+        />
+        <YearOverview date={now} />
+        <h3>Carpe Diem</h3>
+        <TimeOverview date={now} />
+        <h3>Tempus fugit</h3>
+        <Weeks birthday={startOfTime} date={now} />
+      </Container>
+    </>
   );
 };
 
-const Container = styled.div`
-  display: grid;
-  grid-gap: 2.5em;
+const Container = styled.main`
   margin: 1.5em;
+
+  & > h1 {
+    margin-bottom: 1em;
+  }
+
+  & > h3 {
+    margin: 1.5em 0;
+  }
+
+  & > div {
+    margin: 2rem 0;
+  }
+
   @media (max-width: 640px) {
     margin: 1.5em auto;
     width: 87.5%;
-  }
-  & > .current-time {
-    font-size: 3rem;
-    font-weight: 600;
   }
 `;
 

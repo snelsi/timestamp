@@ -31,7 +31,7 @@ export const TimeOverview: React.FC<TimeOverviewProps> = ({ date }) => (
 
 const Container = styled.div`
   display: grid;
-  grid-gap: 1.25em;
+  grid-gap: 1em;
 `;
 
 const Row = styled.div`
