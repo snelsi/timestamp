@@ -2,7 +2,6 @@ import * as React from "react";
 import styled from "styled-components";
 
 import Tippy from "@tippyjs/react";
-import "tippy.js/dist/tippy.css";
 
 import startOfISOWeek from "date-fns/startOfISOWeek";
 import endOfISOWeek from "date-fns/endOfISOWeek";
