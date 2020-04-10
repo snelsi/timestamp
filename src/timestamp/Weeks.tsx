@@ -74,7 +74,7 @@ const Grid = styled.div`
 `;
 
 const Week = styled.span`
-  background-color: rgba(242, 244, 248, 1);
+  background-color: transparent;
   border-radius: 3px;
   border: 1px solid rgba(77, 83, 88, 1);
   cursor: pointer;
@@ -83,9 +83,17 @@ const Week = styled.span`
   transition: var(--transition-ease);
 
   &[data-status="gone"] {
-    background-color: rgba(75, 77, 79, 0.8);
+    background-color: rgba(70, 72, 75, 0.8);
   }
   &[data-status="current"] {
     background-color: rgba(249, 77, 86, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    border: 1px solid rgba(55, 57, 59, 1);
+
+    &[data-status="current"] {
+      background-color: rgba(255, 50, 50, 1);
+    }
   }
 `;

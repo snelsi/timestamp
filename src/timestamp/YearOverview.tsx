@@ -76,7 +76,7 @@ const Row = styled.div`
     &[data-crossed="true"] {
       &::before {
         content: "";
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid var(--border-color, black);
         position: absolute;
         transition: right var(--transition-ease);
         top: 45%;

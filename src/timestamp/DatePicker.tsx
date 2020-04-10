@@ -50,15 +50,25 @@ const Container = styled.div`
 
   & .react-date-picker__wrapper {
     border: none;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--border-color, black);
     min-width: 200px;
   }
   & .react-date-picker__inputGroup {
     padding: 0.5em;
     font-size: 1.25em;
   }
+  & .react-date-picker__inputGroup__input {
+    color: inherit;
+  }
 
   & .react-date-picker__button {
     padding: 0.5em;
+
+    @media (prefers-color-scheme: dark) {
+      & svg {
+        stroke: white;
+        fill: white;
+      }
+    }
   }
 `;

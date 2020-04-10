@@ -21,7 +21,7 @@ export const LineCell = styled.span<LineCellProps>`
 
   &::before {
     content: "";
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid var(--border-color, black);
     position: absolute;
     transition: var(--transition-ease);
     top: 45%;

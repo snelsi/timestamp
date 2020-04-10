@@ -39,12 +39,12 @@ const Container = styled.div`
     text-align: left;
   }
 
-  border-left: 1px solid black;
+  border-left: 1px solid var(--border-color, black);
 
   padding: 0 1.5rem;
 
   @media (min-width: 1181px) {
-    border-right: 1px solid black;
+    border-right: 1px solid var(--border-color, black);
     border-left: none;
 
     position: absolute;
