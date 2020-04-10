@@ -54,7 +54,7 @@ h6 {
 }
 
 *[data-dead] {
-  transition: opacity 0.2s ease;
+  transition: opacity 0.4s ease;
 }
 *[data-dead="true"] {
   opacity: 0.3;
