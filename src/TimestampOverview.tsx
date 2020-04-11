@@ -1,9 +1,7 @@
 import * as React from "react";
-import styled from "styled-components";
 
 import getDaysInYear from "date-fns/getDaysInYear";
 import getDayOfYear from "date-fns/getDayOfYear";
-import isValid from "date-fns/isValid";
 import addWeeks from "date-fns/addWeeks";
 
 import { dateToString, round, useTime } from "scripts";
@@ -11,24 +9,22 @@ import { dateToString, round, useTime } from "scripts";
 import { DatePicker, TimeOverview, Stats, Weeks, Years, YearOverview } from "timestamp";
 
 interface TimestampOverviewProps {
-  initialBirthday: string;
+  initialBirthday: Date;
+  initialDeath?: Date;
 }
-const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }) => {
-  const [birthday, setBirthday] = React.useState(() => new Date(initialBirthday));
-  const [death, setDeath] = React.useState(null);
+const TimestampOverview: React.FC<TimestampOverviewProps> = ({
+  initialBirthday,
+  initialDeath = null,
+}) => {
+  const [birthday, setBirthday] = React.useState(() => initialBirthday);
+  const [death, setDeath] = React.useState(() => initialDeath);
 
-  const handleBirthdayChange = (newDate: Date) => setBirthday(newDate);
-  const handleDeathChange = (newDate: Date) => setDeath(newDate);
-
-  const startOfTime = React.useMemo(() => {
-    if (isValid(birthday)) {
-      const newPathname = dateToString(birthday);
-      window.history.replaceState({}, null, newPathname);
-      return birthday;
-    }
-
-    return new Date();
-  }, [birthday]);
+  React.useEffect(() => {
+    const birthdayPart = dateToString(birthday);
+    const deatPart = death ? `>${dateToString(death)}` : "";
+    const newPathname = `${birthdayPart}${deatPart}`;
+    window.history.replaceState({}, null, newPathname);
+  }, [birthday, death]);
 
   const [now, { isPaused, pauseTime, startTime }] = useTime();
 
@@ -41,20 +37,20 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }
   }, [death, pauseTime, startTime]);
 
   return (
-    <Container>
+    <main>
       <h1 data-dead={isPaused}>{now.toLocaleTimeString()}</h1>
 
       <h3>Memento Mori</h3>
       <DatePicker
-        onBirthdayChange={handleBirthdayChange}
+        onBirthdayChange={setBirthday}
         birthdayValue={birthday}
-        onDeathChange={handleDeathChange}
+        onDeathChange={setDeath}
         deathValue={death}
       />
 
-      <Stats start={startOfTime} end={death || now} />
+      <Stats start={birthday} end={death || now} />
       <Years
-        startYear={startOfTime.getFullYear()}
+        startYear={birthday.getFullYear()}
         currentYear={now.getFullYear()}
         currentYearCompletePercent={round(getDayOfYear(now) / getDaysInYear(now))}
         showYears={death ? death.getFullYear() - birthday.getFullYear() + 1 : 84}
@@ -65,34 +61,13 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({ initialBirthday }
       <TimeOverview date={now} isDead={isPaused} />
       <h3>Tempus fugit</h3>
       <Weeks
-        startWeek={startOfTime}
-        endWeek={death || addWeeks(startOfTime, 4275)}
+        startWeek={birthday}
+        endWeek={death || addWeeks(birthday, 4275)}
         now={now}
         hideFuture={!death}
       />
-    </Container>
+    </main>
   );
 };
-
-const Container = styled.main`
-  margin: 1.5em;
-
-  & > h1 {
-    margin-bottom: 1em;
-  }
-
-  & > h3 {
-    margin: 1.5em 0;
-  }
-
-  & > div {
-    margin: 2rem 0;
-  }
-
-  @media (max-width: 640px) {
-    margin: 1.5em auto;
-    width: 87.5%;
-  }
-`;
 
 export default TimestampOverview;

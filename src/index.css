@@ -95,6 +95,28 @@ h6 {
   opacity: 0.05;
 }
 
+main {
+  margin: 1.5em;
+}
+main > h1 {
+  margin-bottom: 1em;
+}
+
+main > h3 {
+  margin: 1.5em 0;
+}
+
+main > div {
+  margin: 2rem 0;
+}
+
+@media (max-width: 640px) {
+  main {
+    margin: 1.5em auto;
+    width: 87.5%;
+  }
+}
+
 footer a {
   color: #2f7be1;
 }
