@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import "./index.css";
 import "tippy.js/dist/tippy.css";
@@ -9,12 +9,13 @@ import { Footer } from "Footer";
 
 import * as serviceWorker from "serviceWorker";
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = createRoot(container!);
+root.render(
   <React.StrictMode>
     <Timestamp />
     <Footer />
   </React.StrictMode>,
-  document.getElementById("root"),
 );
 
 serviceWorker.register(serviceWorker.SWConfig);
