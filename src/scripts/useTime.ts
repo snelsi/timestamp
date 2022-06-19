@@ -17,6 +17,7 @@ export const useTime = (refreshCycle = 1000): [Date, Additional] => {
       const intervalId = setInterval(() => setNow(new Date()), refreshCycle);
       return () => clearInterval(intervalId);
     }
+    return () => {};
   }, [isPaused, refreshCycle]);
 
   return [now, { isPaused, pauseTime, startTime }];

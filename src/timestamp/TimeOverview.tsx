@@ -3,6 +3,21 @@ import styled from "styled-components";
 
 import { RowLine } from "timestamp";
 
+const Container = styled.div`
+  display: grid;
+  gap: 1em;
+`;
+
+const Row = styled.div`
+  max-width: 44em;
+  &[data-max-width="24"] {
+    max-width: 44em;
+  }
+  &[data-max-width="30"] {
+    max-width: 55em;
+  }
+`;
+
 interface TimeOverviewProps {
   date: Date;
   isDead?: boolean;
@@ -29,18 +44,3 @@ export const TimeOverview: React.FC<TimeOverviewProps> = ({ date, isDead = false
     </Row>
   </Container>
 );
-
-const Container = styled.div`
-  display: grid;
-  gap: 1em;
-`;
-
-const Row = styled.div`
-  max-width: 44em;
-  &[data-max-width="24"] {
-    max-width: 44em;
-  }
-  &[data-max-width="30"] {
-    max-width: 55em;
-  }
-`;

@@ -1,6 +1,16 @@
 import * as React from "react";
 import styled from "styled-components";
 
+const FooterElem = styled.footer`
+  text-align: center;
+  font-size: 1rem;
+  margin: 1rem;
+
+  & > a {
+    display: block;
+  }
+`;
+
 interface FooterProps {}
 
 export const Footer: React.FC<FooterProps> = () => (
@@ -11,13 +21,3 @@ export const Footer: React.FC<FooterProps> = () => (
     <div>© 2020</div>
   </FooterElem>
 );
-
-const FooterElem = styled.footer`
-  text-align: center;
-  font-size: 1rem;
-  margin: 1rem;
-
-  & > a {
-    display: block;
-  }
-`;

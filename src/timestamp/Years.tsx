@@ -3,6 +3,18 @@ import styled from "styled-components";
 
 import { RowLine } from "timestamp";
 
+const YearsGrid = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 1em;
+  max-width: 1000px;
+  overflow: auto;
+
+  @media (min-width: 800px) {
+    padding-right: 10em;
+  }
+`;
+
 interface YearsProps {
   currentYear: number;
   currentYearCompletePercent: number;
@@ -28,15 +40,3 @@ export const Years: React.FC<YearsProps> = ({
     />
   </YearsGrid>
 );
-
-const YearsGrid = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 1em;
-  max-width: 1000px;
-  overflow: auto;
-
-  @media (min-width: 800px) {
-    padding-right: 10em;
-  }
-`;

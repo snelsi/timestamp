@@ -7,26 +7,6 @@ import differenceInHours from "date-fns/differenceInHours";
 import differenceInDays from "date-fns/differenceInDays";
 import differenceInYears from "date-fns/differenceInYears";
 
-const numFormat = (num: number): string =>
-  new Intl.NumberFormat("ru-RU", {
-    maximumFractionDigits: 1,
-  }).format(num);
-
-interface StatsProps {
-  start: Date;
-  end: Date;
-}
-
-export const Stats: React.FC<StatsProps> = ({ start, end }) => (
-  <Container>
-    <span>{numFormat(differenceInYears(end, start))}</span> <span>Years</span>
-    <span>{numFormat(differenceInDays(end, start))}</span> <span>Days</span>
-    <span>{numFormat(differenceInHours(end, start))}</span> <span>Hours</span>
-    <span>{numFormat(differenceInMinutes(end, start))}</span> <span>Minutes</span>
-    <span>{numFormat(differenceInSeconds(end, start))}</span> <span>Seconds</span>
-  </Container>
-);
-
 const Container = styled.div`
   width: 40rem;
   width: fit-content;
@@ -62,3 +42,23 @@ const Container = styled.div`
     width: 100%;
   }
 `;
+
+const numFormat = (num: number): string =>
+  new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 1,
+  }).format(num);
+
+interface StatsProps {
+  start: Date;
+  end: Date;
+}
+
+export const Stats: React.FC<StatsProps> = ({ start, end }) => (
+  <Container>
+    <span>{numFormat(differenceInYears(end, start))}</span> <span>Years</span>
+    <span>{numFormat(differenceInDays(end, start))}</span> <span>Days</span>
+    <span>{numFormat(differenceInHours(end, start))}</span> <span>Hours</span>
+    <span>{numFormat(differenceInMinutes(end, start))}</span> <span>Minutes</span>
+    <span>{numFormat(differenceInSeconds(end, start))}</span> <span>Seconds</span>
+  </Container>
+);

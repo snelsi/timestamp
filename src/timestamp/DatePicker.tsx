@@ -5,38 +5,6 @@ import DatePickerInput from "react-date-picker";
 
 import { CakeIcon, DeadIcon } from "timestamp";
 
-interface DatePickerProps {
-  onBirthdayChange: (newDate: Date) => void;
-  birthdayValue: Date;
-  onDeathChange: (newDate: Date) => void;
-  deathValue: Date;
-}
-
-export const DatePicker: React.FC<DatePickerProps> = ({
-  onBirthdayChange,
-  birthdayValue,
-  onDeathChange,
-  deathValue,
-}) => (
-  <Container>
-    <DatePickerInput
-      onChange={onBirthdayChange}
-      value={birthdayValue}
-      format="y-MM-dd"
-      clearIcon={null}
-      calendarIcon={<CakeIcon />}
-    />
-    <DatePickerInput
-      minDate={birthdayValue}
-      onChange={onDeathChange}
-      value={deathValue}
-      format="y-MM-dd"
-      calendarIcon={<DeadIcon />}
-      clearIcon={deathValue === null ? null : undefined}
-    />
-  </Container>
-);
-
 const Container = styled.div`
   display: grid;
   gap: 1em;
@@ -72,3 +40,35 @@ const Container = styled.div`
     }
   }
 `;
+
+interface DatePickerProps {
+  onBirthdayChange: (newDate: Date) => void;
+  birthdayValue: Date;
+  onDeathChange: (newDate: Date) => void;
+  deathValue: Date;
+}
+
+export const DatePicker: React.FC<DatePickerProps> = ({
+  onBirthdayChange,
+  birthdayValue,
+  onDeathChange,
+  deathValue,
+}) => (
+  <Container>
+    <DatePickerInput
+      onChange={onBirthdayChange}
+      value={birthdayValue}
+      format="y-MM-dd"
+      clearIcon={null}
+      calendarIcon={<CakeIcon />}
+    />
+    <DatePickerInput
+      minDate={birthdayValue}
+      onChange={onDeathChange}
+      value={deathValue}
+      format="y-MM-dd"
+      calendarIcon={<DeadIcon />}
+      clearIcon={deathValue === null ? null : undefined}
+    />
+  </Container>
+);
