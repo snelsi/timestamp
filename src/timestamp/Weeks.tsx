@@ -9,7 +9,7 @@ import eachWeekOfInterval from "date-fns/eachWeekOfInterval";
 import isSameWeek from "date-fns/isSameWeek";
 import isBefore from "date-fns/isBefore";
 
-import { dateToString, fancyWeek } from "scripts";
+import { fancyWeek } from "scripts";
 
 const Container = styled.div`
   max-width: 920px;
@@ -59,41 +59,43 @@ interface WeeksProps {
 }
 
 export const Weeks: React.FC<WeeksProps> = ({ startWeek, endWeek, now, hideFuture = true }) => {
-  const firstWeekString = dateToString(startWeek);
-  const lastWeekString = dateToString(endWeek);
-  const currentWeekString = dateToString(now);
+  const firstWeek = startOfISOWeek(startWeek);
+  const lastWeek = endOfISOWeek(endWeek);
+  const currentWeek = endOfISOWeek(now);
 
   const weeks = React.useMemo(() => {
-    const firstWeek = startOfISOWeek(new Date(firstWeekString));
-    const lastWeek = endOfISOWeek(new Date(lastWeekString));
-    const currentWeek = endOfISOWeek(new Date(currentWeekString));
+    try {
+      const weeks: IWeek[] = eachWeekOfInterval({
+        start: firstWeek,
+        end: lastWeek,
+      }).map((week) => {
+        let status: "gone" | "current" | "future" = "future";
+        if (isSameWeek(week, currentWeek)) {
+          status = "current";
+        } else if (isBefore(week, currentWeek)) {
+          status = "gone";
+        }
+        return {
+          label: fancyWeek(week),
+          status,
+        };
+      });
 
-    const weeks: IWeek[] = eachWeekOfInterval({
-      start: firstWeek,
-      end: lastWeek,
-    }).map((week) => {
-      let status: "gone" | "current" | "future" = "future";
-      if (isSameWeek(week, currentWeek)) {
-        status = "current";
-      } else if (isBefore(week, currentWeek)) {
-        status = "gone";
-      }
-      return {
-        label: fancyWeek(week),
-        status,
-      };
-    });
-
-    return weeks.map(({ label, status }) => (
-      <Tippy content={label} key={label}>
-        <Week data-status={status} />
-      </Tippy>
-    ));
-  }, [firstWeekString, lastWeekString, currentWeekString]);
+      return weeks;
+    } catch {
+      return [];
+    }
+  }, [firstWeek, lastWeek, currentWeek]);
 
   return (
     <Container>
-      <Grid data-hide-future={hideFuture}>{weeks}</Grid>
+      <Grid data-hide-future={hideFuture}>
+        {weeks.map(({ label, status }) => (
+          <Tippy content={label} key={label}>
+            <Week data-status={status} />
+          </Tippy>
+        ))}
+      </Grid>
     </Container>
   );
 };

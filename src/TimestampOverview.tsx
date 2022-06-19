@@ -16,8 +16,8 @@ const TimestampOverview: React.FC<TimestampOverviewProps> = ({
   initialBirthday,
   initialDeath = null,
 }) => {
-  const [birthday, setBirthday] = React.useState(() => initialBirthday);
-  const [death, setDeath] = React.useState(() => initialDeath);
+  const [birthday, setBirthday] = React.useState(initialBirthday);
+  const [death, setDeath] = React.useState(initialDeath);
 
   React.useEffect(() => {
     const birthdayPart = dateToString(birthday);
